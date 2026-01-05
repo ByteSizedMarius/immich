@@ -3,7 +3,7 @@
   import { editManager, EditToolType } from '$lib/managers/edit/edit-manager.svelte';
   import { websocketEvents } from '$lib/stores/websocket';
   import { getAssetEdits, type AssetResponseDto } from '@immich/sdk';
-  import { Button, IconButton, VStack } from '@immich/ui';
+  import { Button, ConfirmModal, IconButton, modalManager, VStack } from '@immich/ui';
   import { mdiClose, mdiFloppy, mdiRefresh } from '@mdi/js';
   import { onDestroy, onMount } from 'svelte';
   import { t } from 'svelte-i18n';
@@ -38,6 +38,25 @@
     }
   }
 
+  async function closeEditor() {
+    if (await editManager.closeConfirm()) {
+      onClose();
+    }
+  }
+
+  async function resetEdits() {
+    const confirmed = await modalManager.show(ConfirmModal, {
+      title: $t('editor_reset_all_changes'),
+      prompt: $t('editor_confirm_reset_all_changes'),
+    });
+
+    if (!confirmed) {
+      return;
+    }
+
+    await editManager.resetAllChanges();
+  }
+
   let { asset = $bindable(), onClose }: Props = $props();
 </script>
 
@@ -51,7 +70,7 @@
       color="secondary"
       icon={mdiClose}
       aria-label={$t('close')}
-      onclick={onClose}
+      onclick={closeEditor}
     />
     <p class="text-lg text-immich-fg dark:text-immich-dark-fg capitalize">{$t('editor')}</p>
   </div>
@@ -64,13 +83,7 @@
   <div class="flex-1"></div>
   <section class="p-4">
     <VStack gap={4}>
-      <Button
-        fullWidth
-        leadingIcon={mdiFloppy}
-        color="success"
-        onclick={() => applyEdits()}
-        loading={editManager.isApplyingEdits}
-      >
+      <Button fullWidth leadingIcon={mdiFloppy} onclick={() => applyEdits()} loading={editManager.isApplyingEdits}>
         {$t('save')}
       </Button>
       <!-- TODO make this clear all edits -->
@@ -78,7 +91,8 @@
         fullWidth
         leadingIcon={mdiRefresh}
         color="danger"
-        onclick={() => editManager.resetAllChanges()}
+        variant="outline"
+        onclick={resetEdits}
         disabled={!editManager.hasChanges}
       >
         {$t('editor_reset_all_changes')}

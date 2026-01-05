@@ -231,14 +231,11 @@
   };
 
   const closeEditor = async () => {
-    if (await editManager.closeConfirm()) {
-      // If edits were applied, refresh the asset to show the new image
-      if (editManager.hasAppliedEdits) {
-        const refreshedAsset = await getAssetInfo({ id: asset.id });
-        asset = refreshedAsset;
-      }
-      isShowEditor = false;
+    if (editManager.hasAppliedEdits) {
+      const refreshedAsset = await getAssetInfo({ id: asset.id });
+      asset = refreshedAsset;
     }
+    isShowEditor = false;
   };
 
   const navigateAsset = async (order?: 'previous' | 'next', e?: Event) => {

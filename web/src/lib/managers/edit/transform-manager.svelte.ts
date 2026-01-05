@@ -223,6 +223,7 @@ class TransformManager implements EditToolManager {
     this.region = { x: 0, y: 0, width: 100, height: 100 };
     this.cropImageSize = [1000, 1000];
     this.cropImageScale = 1;
+    this.cropAspectRatio = 'free';
   }
 
   mirror(axis: 'horizontal' | 'vertical') {

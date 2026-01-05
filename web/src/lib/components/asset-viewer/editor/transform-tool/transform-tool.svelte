@@ -1,58 +1,71 @@
 <script lang="ts">
   import { transformManager } from '$lib/managers/edit/transform-manager.svelte';
-  import { Button, Field, HStack, IconButton, Select, type SelectItem } from '@immich/ui';
+  import { HStack, IconButton } from '@immich/ui';
   import { mdiFlipHorizontal, mdiFlipVertical, mdiRotateLeft, mdiRotateRight } from '@mdi/js';
   import { t } from 'svelte-i18n';
 
-  const aspectRatios: SelectItem[] = [
-    { label: $t('crop_aspect_ratio_free'), value: 'free' },
-    { label: $t('crop_aspect_ratio_original'), value: 'original' },
-    {
-      label: '9:16',
-      value: '9:16',
-    },
-    {
-      label: '5:7',
-      value: '5:7',
-    },
-    {
-      label: '4:5',
-      value: '4:5',
-    },
-    {
-      label: '3:4',
-      value: '3:4',
-    },
-    {
-      label: '2:3',
-      value: '2:3',
-    },
-    {
-      label: 'Square',
-      value: '1:1',
-    },
+  interface AspectRatioOption {
+    label: string;
+    value: string;
+    width?: number;
+    height?: number;
+    isFree?: boolean;
+  }
+
+  const aspectRatios: AspectRatioOption[] = [
+    { label: $t('crop_aspect_ratio_free'), value: 'free', isFree: true },
+    { label: $t('crop_aspect_ratio_original'), value: 'original', width: 24, height: 18 },
+    { label: '5:4', value: '5:4', width: 22, height: 18 },
+    { label: '4:5', value: '4:5', width: 18, height: 22 },
+    { label: '4:3', value: '4:3', width: 24, height: 18 },
+    { label: '3:4', value: '3:4', width: 18, height: 24 },
+    { label: '3:2', value: '3:2', width: 24, height: 16 },
+    { label: '2:3', value: '2:3', width: 16, height: 24 },
+    { label: '16:9', value: '16:9', width: 24, height: 14 },
+    { label: '9:16', value: '9:16', width: 14, height: 24 },
+    { label: 'Square', value: '1:1', width: 20, height: 20 },
   ];
 
-  let selectedRatioItem = $state<SelectItem>(aspectRatios[0]);
+  let isRotated = $derived(transformManager.normalizedRotation % 180 !== 0);
 
-  let selectedRatio = $derived(selectedRatioItem.value);
-
-  function selectAspectRatio(ratio: 'original' | 'free' | (typeof aspectRatios)[number]['value']) {
-    if (ratio === 'original') {
-      const [width, height] = transformManager.cropImageSize;
-      ratio = `${width}:${height}`;
+  function rotatedRatio(ratio: AspectRatioOption): string {
+    if (ratio.value === 'free') {
+      return ratio.value;
     }
 
-    transformManager.setAspectRatio(ratio);
+    if (isRotated) {
+      let [width, height] = ratio.value.split(':');
+      return `${height}:${width}`;
+    } else {
+      return ratio.value;
+    }
   }
 
-  function onAspectRatioSelect(ratio: SelectItem) {
-    selectedRatio = ratio.value;
-    selectAspectRatio(ratio.value);
+  function buttonRatio(ratio: AspectRatioOption): string {
+    if (ratio.value === 'original') {
+      const [width, height] = transformManager.cropImageSize;
+      // Account for rotation when comparing to original
+      if (isRotated) {
+        return `${height}:${width}`;
+      }
+      return `${width}:${height}`;
+    }
+    return rotatedRatio(ratio);
   }
 
-  function rotateAspectRatio() {
-    transformManager.rotateAspectRatio();
+  function selectAspectRatio(ratio: AspectRatioOption) {
+    console.log(buttonRatio(ratio));
+    let appliedRatio;
+    if (ratio.value === 'original') {
+      const [width, height] = transformManager.cropImageSize;
+      appliedRatio = `${width}:${height}`;
+    } else {
+      appliedRatio = rotatedRatio(ratio);
+    }
+
+    console.log('Selected aspect ratio:', appliedRatio);
+
+    transformManager.setAspectRatio(appliedRatio);
   }
 
   async function rotateImage(degrees: number) {
@@ -65,30 +78,71 @@
 </script>
 
 <div class="mt-3 px-4">
-  <div class="flex h-10 w-full items-center justify-between text-sm">
-    <h2>{$t('crop')}</h2>
-  </div>
-  <HStack>
-    <Field>
-      <Select class="w-full" onChange={onAspectRatioSelect} bind:value={selectedRatioItem} data={aspectRatios} />
-    </Field>
-    <IconButton
-      shape="round"
-      variant="ghost"
-      color="secondary"
-      icon={mdiRotateRight}
-      aria-label={$t('reset')}
-      onclick={rotateAspectRatio}
-      disabled={selectedRatio === 'free' || selectedRatio === 'original'}
-    />
-  </HStack>
   <div class="flex h-10 w-full items-center justify-between text-sm mt-2">
     <h2>{$t('editor_orientation')}</h2>
   </div>
   <HStack>
-    <Button fullWidth leadingIcon={mdiRotateLeft} onclick={() => rotateImage(-90)}></Button>
-    <Button fullWidth trailingIcon={mdiRotateRight} onclick={() => rotateImage(90)}></Button>
-    <Button fullWidth leadingIcon={mdiFlipHorizontal} onclick={() => mirrorImage('horizontal')}></Button>
-    <Button fullWidth trailingIcon={mdiFlipVertical} onclick={() => mirrorImage('vertical')}></Button>
+    <IconButton
+      class="w-full"
+      size="small"
+      aria-label={$t('editor_rotate_left')}
+      icon={mdiRotateLeft}
+      onclick={() => rotateImage(-90)}
+    />
+    <IconButton
+      class="w-full"
+      size="small"
+      aria-label={$t('editor_rotate_right')}
+      icon={mdiRotateRight}
+      onclick={() => rotateImage(90)}
+    />
+    <IconButton
+      class="w-full"
+      size="small"
+      aria-label={$t('editor_flip_horizontal')}
+      icon={mdiFlipHorizontal}
+      onclick={() => mirrorImage('horizontal')}
+    />
+    <IconButton
+      class="w-full"
+      size="small"
+      aria-label={$t('editor_flip_vertical')}
+      icon={mdiFlipVertical}
+      onclick={() => mirrorImage('vertical')}
+    />
   </HStack>
+
+  <div class="flex h-10 w-full items-center justify-between text-sm mt-6">
+    <h2>{$t('crop')}</h2>
+  </div>
+
+  <!-- Aspect Ratio Grid -->
+  <div class="grid grid-cols-2 mb-4">
+    {#each aspectRatios as ratio (ratio.value)}
+      <button
+        class="flex items-center gap-2 bg-transparent border-none p-2 cursor-pointer transition-all"
+        onclick={() => selectAspectRatio(ratio)}
+        aria-label={ratio.label}
+        type="button"
+      >
+        <div
+          class={`w-14 h-14 rounded-full flex items-center justify-center transition-colors ${
+            transformManager.cropAspectRatio === buttonRatio(ratio) ? 'bg-blue-300' : 'bg-gray-500'
+          }`}
+        >
+          {#if ratio.isFree}
+            <!-- Free crop icon with dashed border -->
+            <div class="w-6 h-6 border-2 border-dashed border-white rounded"></div>
+          {:else}
+            <!-- Aspect ratio box -->
+            <div
+              class="border-2 border-white rounded-xs"
+              style="width: {ratio.width}px; height: {ratio.height}px;"
+            ></div>
+          {/if}
+        </div>
+        <span class="text-sm text-white text-left">{ratio.label}</span>
+      </button>
+    {/each}
+  </div>
 </div>
