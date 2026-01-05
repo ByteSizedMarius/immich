@@ -947,6 +947,8 @@ describe(MediaService.name, () => {
       mocks.assetJob.getForGenerateThumbnailJob.mockResolvedValue({
         ...assetStub.withCropEdit,
       });
+      mocks.person.getFaces.mockResolvedValue([]);
+      mocks.ocr.getByAssetId.mockResolvedValue([]);
 
       await sut.handleGenerateThumbnails({ id: assetStub.image.id, source: 'edit' });
       expect(mocks.media.generateThumbnail).toHaveBeenCalledWith(
@@ -985,9 +987,16 @@ describe(MediaService.name, () => {
       });
 
       const status = await sut.handleGenerateThumbnails({ id: assetStub.image.id, source: 'edit' });
-      expect(mocks.storage.unlink).toHaveBeenCalledWith('/uploads/user-id/fullsize/path_edited.jpg');
-      expect(mocks.storage.unlink).toHaveBeenCalledWith('/uploads/user-id/thumbnail/path_edited.jpg');
-      expect(mocks.storage.unlink).toHaveBeenCalledWith('/uploads/user-id/preview/path_edited.jpg');
+      expect(mocks.job.queue).toHaveBeenCalledWith({
+        name: JobName.FileDelete,
+        data: {
+          files: [
+            '/uploads/user-id/fullsize/path_edited.jpg',
+            '/uploads/user-id/preview/path_edited.jpg',
+            '/uploads/user-id/thumbnail/path_edited.jpg',
+          ],
+        },
+      });
 
       expect(mocks.asset.deleteFiles).toHaveBeenCalledWith(
         expect.arrayContaining([
@@ -1013,6 +1022,8 @@ describe(MediaService.name, () => {
       mocks.assetJob.getForGenerateThumbnailJob.mockResolvedValue({
         ...assetStub.withCropEdit,
       });
+      mocks.person.getFaces.mockResolvedValue([]);
+      mocks.ocr.getByAssetId.mockResolvedValue([]);
 
       await sut.handleGenerateThumbnails({ id: assetStub.image.id, source: 'edit' });
 
@@ -1056,6 +1067,8 @@ describe(MediaService.name, () => {
       });
       const thumbhashBuffer = Buffer.from('a thumbhash', 'utf8');
       mocks.media.generateThumbhash.mockResolvedValue(thumbhashBuffer);
+      mocks.person.getFaces.mockResolvedValue([]);
+      mocks.ocr.getByAssetId.mockResolvedValue([]);
 
       await sut.handleGenerateThumbnails({ id: assetStub.image.id, source: 'edit' });
 
@@ -1072,6 +1085,8 @@ describe(MediaService.name, () => {
       });
       const thumbhashBuffer = Buffer.from('a thumbhash', 'utf8');
       mocks.media.generateThumbhash.mockResolvedValue(thumbhashBuffer);
+      mocks.person.getFaces.mockResolvedValue([]);
+      mocks.ocr.getByAssetId.mockResolvedValue([]);
 
       await sut.handleGenerateThumbnails({ id: assetStub.image.id, source: 'edit' });
 

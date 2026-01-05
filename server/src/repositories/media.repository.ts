@@ -6,9 +6,8 @@ import fs from 'node:fs/promises';
 import { Writable } from 'node:stream';
 import sharp from 'sharp';
 import { ORIENTATION_TO_SHARP_ROTATION } from 'src/constants';
-import { AssetFace, Exif } from 'src/database';
-import { EditActionCrop, EditActionItem } from 'src/dtos/editing.dto';
-import { AssetOcrResponseDto } from 'src/dtos/ocr.dto';
+import { Exif } from 'src/database';
+import { EditActionItem } from 'src/dtos/editing.dto';
 import { Colorspace, LogLevel, RawExtractedFormat } from 'src/enum';
 import { LoggingRepository } from 'src/repositories/logging.repository';
 import {
