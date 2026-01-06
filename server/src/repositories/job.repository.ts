@@ -233,10 +233,6 @@ export class JobRepository {
       case JobName.FacialRecognitionQueueAll: {
         return { jobId: JobName.FacialRecognitionQueueAll };
       }
-      case JobName.AssetGenerateThumbnails: {
-        // Lower priority # == higher priority, default is 0
-        return item.data.source === 'edit' ? { priority: -1 } : null;
-      }
       default: {
         return null;
       }
