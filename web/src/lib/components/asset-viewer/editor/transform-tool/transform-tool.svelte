@@ -1,6 +1,6 @@
 <script lang="ts">
   import { transformManager } from '$lib/managers/edit/transform-manager.svelte';
-  import { HStack, IconButton } from '@immich/ui';
+  import { Button, HStack, IconButton } from '@immich/ui';
   import { mdiFlipHorizontal, mdiFlipVertical, mdiRotateLeft, mdiRotateRight } from '@mdi/js';
   import { t } from 'svelte-i18n';
 
@@ -41,20 +41,22 @@
     }
   }
 
-  function buttonRatio(ratio: AspectRatioOption): string {
+  function ratioSelected(ratio: AspectRatioOption): boolean {
+    let currentRatioRotated;
     if (ratio.value === 'original') {
       const [width, height] = transformManager.cropImageSize;
       // Account for rotation when comparing to original
       if (isRotated) {
-        return `${height}:${width}`;
+        currentRatioRotated = `${height}:${width}`;
       }
-      return `${width}:${height}`;
+      currentRatioRotated = `${width}:${height}`;
     }
-    return rotatedRatio(ratio);
+    currentRatioRotated = rotatedRatio(ratio);
+
+    return transformManager.cropAspectRatio === currentRatioRotated;
   }
 
   function selectAspectRatio(ratio: AspectRatioOption) {
-    console.log(buttonRatio(ratio));
     let appliedRatio;
     if (ratio.value === 'original') {
       const [width, height] = transformManager.cropImageSize;
@@ -62,8 +64,6 @@
     } else {
       appliedRatio = rotatedRatio(ratio);
     }
-
-    console.log('Selected aspect ratio:', appliedRatio);
 
     transformManager.setAspectRatio(appliedRatio);
   }
@@ -119,30 +119,30 @@
   <!-- Aspect Ratio Grid -->
   <div class="grid grid-cols-2 mb-4">
     {#each aspectRatios as ratio (ratio.value)}
-      <button
-        class="flex items-center gap-2 bg-transparent border-none p-2 cursor-pointer transition-all"
-        onclick={() => selectAspectRatio(ratio)}
-        aria-label={ratio.label}
-        type="button"
-      >
-        <div
-          class={`w-14 h-14 rounded-full flex items-center justify-center transition-colors ${
-            transformManager.cropAspectRatio === buttonRatio(ratio) ? 'bg-blue-300' : 'bg-gray-500'
-          }`}
+      <HStack>
+        <Button
+          class="w-14 h-14 m-2"
+          shape="round"
+          onclick={() => selectAspectRatio(ratio)}
+          aria-label={ratio.label}
+          color={ratioSelected(ratio) ? 'primary' : 'secondary'}
+          variant={ratioSelected(ratio) ? 'filled' : 'outline'}
         >
           {#if ratio.isFree}
             <!-- Free crop icon with dashed border -->
-            <div class="w-6 h-6 border-2 border-dashed border-white rounded"></div>
+            <div
+              class="w-6 h-6 border-2 border-dashed rounded-xs {ratioSelected(ratio) ? 'border-black' : 'border-white'}"
+            ></div>
           {:else}
             <!-- Aspect ratio box -->
             <div
-              class="border-2 border-white rounded-xs"
+              class="border-2 rounded-xs {ratioSelected(ratio) ? 'border-black' : 'border-white'}"
               style="width: {ratio.width}px; height: {ratio.height}px;"
             ></div>
           {/if}
-        </div>
+        </Button>
         <span class="text-sm text-white text-left">{ratio.label}</span>
-      </button>
+      </HStack>
     {/each}
   </div>
 </div>

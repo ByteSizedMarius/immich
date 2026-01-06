@@ -128,9 +128,7 @@ export class EditManager {
             },
           }));
 
-      const t = Date.now();
       await editCompleted;
-      console.log(`Edit completed in ${Date.now() - t}ms`);
       toastManager.success('Edits applied successfully');
       this.hasAppliedEdits = true;
 

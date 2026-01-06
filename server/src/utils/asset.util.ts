@@ -24,9 +24,9 @@ export const getAssetFiles = (files: AssetFile[]) => ({
   thumbnailFile: getAssetFile(files, AssetFileType.Thumbnail),
   sidecarFile: getAssetFile(files, AssetFileType.Sidecar),
 
-  editedFullsizeFile: getAssetFile(files, AssetFileType.EditedFullSize),
-  editedPreviewFile: getAssetFile(files, AssetFileType.EditedPreview),
-  editedThumbnailFile: getAssetFile(files, AssetFileType.EditedThumbnail),
+  editedFullsizeFile: getAssetFile(files, AssetFileType.FullSizeEdited),
+  editedPreviewFile: getAssetFile(files, AssetFileType.PreviewEdited),
+  editedThumbnailFile: getAssetFile(files, AssetFileType.ThumbnailEdited),
 });
 
 export const addAssets = async (

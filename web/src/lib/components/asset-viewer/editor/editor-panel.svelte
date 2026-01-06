@@ -3,8 +3,8 @@
   import { editManager, EditToolType } from '$lib/managers/edit/edit-manager.svelte';
   import { websocketEvents } from '$lib/stores/websocket';
   import { getAssetEdits, type AssetResponseDto } from '@immich/sdk';
-  import { Button, ConfirmModal, IconButton, modalManager, VStack } from '@immich/ui';
-  import { mdiClose, mdiFloppy, mdiRefresh } from '@mdi/js';
+  import { Button, HStack, IconButton } from '@immich/ui';
+  import { mdiClose } from '@mdi/js';
   import { onDestroy, onMount } from 'svelte';
   import { t } from 'svelte-i18n';
 
@@ -44,36 +44,26 @@
     }
   }
 
-  async function resetEdits() {
-    const confirmed = await modalManager.show(ConfirmModal, {
-      title: $t('editor_reset_all_changes'),
-      prompt: $t('editor_confirm_reset_all_changes'),
-    });
-
-    if (!confirmed) {
-      return;
-    }
-
-    await editManager.resetAllChanges();
-  }
-
   let { asset = $bindable(), onClose }: Props = $props();
 </script>
 
 <svelte:document use:shortcut={{ shortcut: { key: 'Escape' }, onShortcut: onClose }} />
 
-<section class="relative flex flex-col h-full p-2 dark:bg-immich-dark-bg dark:text-immich-dark-fg dark">
-  <div class="flex place-items-center gap-2">
-    <IconButton
-      shape="round"
-      variant="ghost"
-      color="secondary"
-      icon={mdiClose}
-      aria-label={$t('close')}
-      onclick={closeEditor}
-    />
-    <p class="text-lg text-immich-fg dark:text-immich-dark-fg capitalize">{$t('editor')}</p>
-  </div>
+<section class="relative flex flex-col h-full p-2 dark:bg-immich-dark-bg dark:text-immich-dark-fg dark pt-3">
+  <HStack class="justify-between me-4">
+    <HStack>
+      <IconButton
+        shape="round"
+        variant="ghost"
+        color="secondary"
+        icon={mdiClose}
+        aria-label={$t('close')}
+        onclick={closeEditor}
+      />
+      <p class="text-lg text-immich-fg dark:text-immich-dark-fg capitalize">{$t('editor')}</p>
+    </HStack>
+    <Button shape="round" size="small" onclick={applyEdits}>{$t('save')}</Button>
+  </HStack>
 
   <section>
     {#if editManager.selectedTool}
@@ -82,21 +72,15 @@
   </section>
   <div class="flex-1"></div>
   <section class="p-4">
-    <VStack gap={4}>
-      <Button fullWidth leadingIcon={mdiFloppy} onclick={() => applyEdits()} loading={editManager.isApplyingEdits}>
-        {$t('save')}
-      </Button>
-      <!-- TODO make this clear all edits -->
-      <Button
-        fullWidth
-        leadingIcon={mdiRefresh}
-        color="danger"
-        variant="outline"
-        onclick={resetEdits}
-        disabled={!editManager.hasChanges}
-      >
-        {$t('editor_reset_all_changes')}
-      </Button>
-    </VStack>
+    <Button
+      variant="outline"
+      onclick={() => editManager.resetAllChanges()}
+      disabled={!editManager.hasChanges}
+      class="self-start"
+      shape="round"
+      size="small"
+    >
+      {$t('editor_reset_all_changes')}
+    </Button>
   </section>
 </section>

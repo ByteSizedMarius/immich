@@ -31,17 +31,17 @@ const sidecarFileWithoutExt = factory.assetFile({
 });
 
 const editedPreviewFile = factory.assetFile({
-  type: AssetFileType.EditedPreview,
+  type: AssetFileType.PreviewEdited,
   path: '/uploads/user-id/preview/path_edited.jpg',
 });
 
 const editedThumbnailFile = factory.assetFile({
-  type: AssetFileType.EditedThumbnail,
+  type: AssetFileType.ThumbnailEdited,
   path: '/uploads/user-id/thumbnail/path_edited.jpg',
 });
 
 const editedFullsizeFile = factory.assetFile({
-  type: AssetFileType.EditedFullSize,
+  type: AssetFileType.FullSizeEdited,
   path: '/uploads/user-id/fullsize/path_edited.jpg',
 });
 

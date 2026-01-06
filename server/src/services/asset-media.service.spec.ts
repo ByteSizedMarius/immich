@@ -529,7 +529,7 @@ describe(AssetMediaService.name, () => {
           ...assetStub.withCropEdit.files,
           {
             id: 'edited-file',
-            type: AssetFileType.EditedFullSize,
+            type: AssetFileType.FullSizeEdited,
             path: '/uploads/user-id/fullsize/edited.jpg',
           } as AssetFile,
         ],
@@ -554,7 +554,7 @@ describe(AssetMediaService.name, () => {
           ...assetStub.withCropEdit.files,
           {
             id: 'edited-file',
-            type: AssetFileType.EditedFullSize,
+            type: AssetFileType.FullSizeEdited,
             path: '/uploads/user-id/fullsize/edited.jpg',
           } as AssetFile,
         ],
@@ -579,7 +579,7 @@ describe(AssetMediaService.name, () => {
           ...assetStub.withCropEdit.files,
           {
             id: 'edited-file',
-            type: AssetFileType.EditedFullSize,
+            type: AssetFileType.FullSizeEdited,
             path: '/uploads/user-id/fullsize/edited.jpg',
           } as AssetFile,
         ],

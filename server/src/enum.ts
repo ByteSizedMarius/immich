@@ -45,9 +45,9 @@ export enum AssetFileType {
   Preview = 'preview',
   Thumbnail = 'thumbnail',
   Sidecar = 'sidecar',
-  EditedFullSize = 'fullsize_edited',
-  EditedPreview = 'preview_edited',
-  EditedThumbnail = 'thumbnail_edited',
+  FullSizeEdited = 'fullsize_edited',
+  PreviewEdited = 'preview_edited',
+  ThumbnailEdited = 'thumbnail_edited',
 }
 
 export enum AlbumUserRole {

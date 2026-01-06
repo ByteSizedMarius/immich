@@ -1092,9 +1092,9 @@ describe(MediaService.name, () => {
 
       expect(mocks.asset.upsertFiles).toHaveBeenCalledWith(
         expect.arrayContaining([
-          expect.objectContaining({ type: AssetFileType.EditedFullSize }),
-          expect.objectContaining({ type: AssetFileType.EditedPreview }),
-          expect.objectContaining({ type: AssetFileType.EditedThumbnail }),
+          expect.objectContaining({ type: AssetFileType.FullSizeEdited }),
+          expect.objectContaining({ type: AssetFileType.PreviewEdited }),
+          expect.objectContaining({ type: AssetFileType.ThumbnailEdited }),
         ]),
       );
     });

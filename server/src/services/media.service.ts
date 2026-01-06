@@ -232,7 +232,7 @@ export class MediaService extends BaseService {
       toUpsert.push({
         assetId: asset.id,
         path: generated.previewPath,
-        type: applyEdits ? AssetFileType.EditedPreview : AssetFileType.Preview,
+        type: applyEdits ? AssetFileType.PreviewEdited : AssetFileType.Preview,
       });
     }
 
@@ -240,7 +240,7 @@ export class MediaService extends BaseService {
       toUpsert.push({
         assetId: asset.id,
         path: generated.thumbnailPath,
-        type: applyEdits ? AssetFileType.EditedThumbnail : AssetFileType.Thumbnail,
+        type: applyEdits ? AssetFileType.ThumbnailEdited : AssetFileType.Thumbnail,
       });
     }
 
@@ -248,7 +248,7 @@ export class MediaService extends BaseService {
       toUpsert.push({
         assetId: asset.id,
         path: generated.fullsizePath,
-        type: applyEdits ? AssetFileType.EditedFullSize : AssetFileType.FullSize,
+        type: applyEdits ? AssetFileType.FullSizeEdited : AssetFileType.FullSize,
       });
     }
 
