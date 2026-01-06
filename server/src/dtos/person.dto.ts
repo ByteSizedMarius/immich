@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 import { AssetFace, Person } from 'src/database';
 import { HistoryBuilder, Property } from 'src/decorators';
 import { AuthDto } from 'src/dtos/auth.dto';
-import { EditActionItem } from 'src/dtos/editing.dto';
+import { AssetEditActionItem } from 'src/dtos/editing.dto';
 import { SourceType } from 'src/enum';
 import { AssetFaceTable } from 'src/schema/tables/asset-face.table';
 import { ImageDimensions } from 'src/types';
@@ -238,7 +238,7 @@ export function mapPerson(person: Person): PersonResponseDto {
 
 export function mapFacesWithoutPerson(
   face: Selectable<AssetFaceTable>,
-  edits?: EditActionItem[],
+  edits?: AssetEditActionItem[],
   assetDimensions?: ImageDimensions,
 ): AssetFaceWithoutPersonResponseDto {
   return {
@@ -262,7 +262,7 @@ export function mapFacesWithoutPerson(
 export function mapFaces(
   face: AssetFace,
   auth: AuthDto,
-  edits?: EditActionItem[],
+  edits?: AssetEditActionItem[],
   assetDimensions?: ImageDimensions,
 ): AssetFaceResponseDto {
   return {

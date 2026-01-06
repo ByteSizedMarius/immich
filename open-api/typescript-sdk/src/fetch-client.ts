@@ -565,7 +565,7 @@ export type CropParameters = {
     /** Top-Left Y coordinate of crop */
     y: number;
 };
-export type EditActionCrop = {
+export type AssetEditActionCrop = {
     action: EditAction;
     parameters: CropParameters;
 };
@@ -573,7 +573,7 @@ export type RotateParameters = {
     /** Rotation angle in degrees */
     angle: number;
 };
-export type EditActionRotate = {
+export type AssetEditActionRotate = {
     action: EditAction;
     parameters: RotateParameters;
 };
@@ -581,18 +581,18 @@ export type MirrorParameters = {
     /** Axis to mirror along */
     axis: MirrorAxis;
 };
-export type EditActionMirror = {
+export type AssetEditActionMirror = {
     action: EditAction;
     parameters: MirrorParameters;
 };
 export type AssetEditsDto = {
     assetId: string;
     /** list of edits */
-    edits: (EditActionCrop | EditActionRotate | EditActionMirror)[];
+    edits: (AssetEditActionCrop | AssetEditActionRotate | AssetEditActionMirror)[];
 };
-export type EditActionListDto = {
+export type AssetEditActionListDto = {
     /** list of edits */
-    edits: (EditActionCrop | EditActionRotate | EditActionMirror)[];
+    edits: (AssetEditActionCrop | AssetEditActionRotate | AssetEditActionMirror)[];
 };
 export type AssetMetadataResponseDto = {
     key: AssetMetadataKey;
@@ -2598,9 +2598,9 @@ export function getAssetEdits({ id }: {
 /**
  * Apply edits to an existing asset
  */
-export function editAsset({ id, editActionListDto }: {
+export function editAsset({ id, assetEditActionListDto }: {
     id: string;
-    editActionListDto: EditActionListDto;
+    assetEditActionListDto: AssetEditActionListDto;
 }, opts?: Oazapfts.RequestOpts) {
     return oazapfts.ok(oazapfts.fetchJson<{
         status: 200;
@@ -2608,7 +2608,7 @@ export function editAsset({ id, editActionListDto }: {
     }>(`/assets/${encodeURIComponent(id)}/edits`, oazapfts.json({
         ...opts,
         method: "PUT",
-        body: editActionListDto
+        body: assetEditActionListDto
     })));
 }
 /**

@@ -3,7 +3,7 @@ import { Selectable } from 'kysely';
 import { AssetFace, AssetFile, Exif, Stack, Tag, User } from 'src/database';
 import { HistoryBuilder, Property } from 'src/decorators';
 import { AuthDto } from 'src/dtos/auth.dto';
-import { EditActionItem } from 'src/dtos/editing.dto';
+import { AssetEditActionItem } from 'src/dtos/editing.dto';
 import { ExifResponseDto, mapExif } from 'src/dtos/exif.dto';
 import {
   AssetFaceWithoutPersonResponseDto,
@@ -112,7 +112,7 @@ export type MapAsset = {
   deviceId: string;
   duplicateId: string | null;
   duration: string | null;
-  edits?: EditActionItem[];
+  edits?: AssetEditActionItem[];
   encodedVideoPath: string | null;
   exifInfo?: Selectable<Exif> | null;
   faces?: AssetFace[];
@@ -157,7 +157,7 @@ export type AssetMapOptions = {
 // TODO: this is inefficient
 const peopleWithFaces = (
   faces?: AssetFace[],
-  edits?: EditActionItem[],
+  edits?: AssetEditActionItem[],
   assetDimensions?: ImageDimensions,
 ): PersonWithFacesResponseDto[] => {
   const result: PersonWithFacesResponseDto[] = [];

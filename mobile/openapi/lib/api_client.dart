@@ -238,10 +238,18 @@ class ApiClient {
           return AssetDeltaSyncDto.fromJson(value);
         case 'AssetDeltaSyncResponseDto':
           return AssetDeltaSyncResponseDto.fromJson(value);
+        case 'AssetEditActionCrop':
+          return AssetEditActionCrop.fromJson(value);
+        case 'AssetEditActionListDto':
+          return AssetEditActionListDto.fromJson(value);
+        case 'AssetEditActionListDtoEditsInner':
+          return AssetEditActionListDtoEditsInner.fromJson(value);
+        case 'AssetEditActionMirror':
+          return AssetEditActionMirror.fromJson(value);
+        case 'AssetEditActionRotate':
+          return AssetEditActionRotate.fromJson(value);
         case 'AssetEditsDto':
           return AssetEditsDto.fromJson(value);
-        case 'AssetEditsDtoEditsInner':
-          return AssetEditsDtoEditsInner.fromJson(value);
         case 'AssetFaceCreateDto':
           return AssetFaceCreateDto.fromJson(value);
         case 'AssetFaceDeleteDto':
@@ -348,14 +356,6 @@ class ApiClient {
           return DuplicateResponseDto.fromJson(value);
         case 'EditAction':
           return EditActionTypeTransformer().decode(value);
-        case 'EditActionCrop':
-          return EditActionCrop.fromJson(value);
-        case 'EditActionListDto':
-          return EditActionListDto.fromJson(value);
-        case 'EditActionMirror':
-          return EditActionMirror.fromJson(value);
-        case 'EditActionRotate':
-          return EditActionRotate.fromJson(value);
         case 'EmailNotificationsResponse':
           return EmailNotificationsResponse.fromJson(value);
         case 'EmailNotificationsUpdate':

@@ -3,7 +3,7 @@ import { VECTOR_EXTENSIONS } from 'src/constants';
 import { Asset, AssetFile } from 'src/database';
 import { UploadFieldName } from 'src/dtos/asset-media.dto';
 import { AuthDto } from 'src/dtos/auth.dto';
-import { EditActionItem } from 'src/dtos/editing.dto';
+import { AssetEditActionItem } from 'src/dtos/editing.dto';
 import {
   AssetOrder,
   AssetType,
@@ -48,7 +48,7 @@ interface DecodeImageOptions {
   colorspace: string;
   processInvalidImages: boolean;
   raw?: RawImageInfo;
-  edits?: EditActionItem[];
+  edits?: AssetEditActionItem[];
 }
 
 export interface DecodeToBufferOptions extends DecodeImageOptions {

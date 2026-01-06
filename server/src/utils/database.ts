@@ -17,7 +17,7 @@ import { jsonArrayFrom, jsonObjectFrom } from 'kysely/helpers/postgres';
 import { parse } from 'pg-connection-string';
 import postgres, { Notice, PostgresError } from 'postgres';
 import { columns, Exif, lockableProperties, LockableProperty, Person } from 'src/database';
-import { EditActionItem } from 'src/dtos/editing.dto';
+import { AssetEditActionItem } from 'src/dtos/editing.dto';
 import { AssetFileType, AssetVisibility, DatabaseExtension, DatabaseSslMode } from 'src/enum';
 import { AssetSearchBuilderOptions } from 'src/repositories/search.repository';
 import { DB } from 'src/schema';
@@ -356,7 +356,7 @@ export const tokenizeForSearch = (text: string): string[] => {
 };
 
 // needed to properly type the return with the EditActionItem discriminated union type
-type AliasedEditActions = AliasedRawBuilder<EditActionItem[], 'edits'>;
+type AliasedEditActions = AliasedRawBuilder<AssetEditActionItem[], 'edits'>;
 export function withEdits(eb: ExpressionBuilder<DB, 'asset'>): AliasedEditActions {
   return jsonArrayFrom(
     eb

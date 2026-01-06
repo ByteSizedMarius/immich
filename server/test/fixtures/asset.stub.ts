@@ -1,6 +1,6 @@
 import { AssetFace, AssetFile, Exif } from 'src/database';
 import { MapAsset } from 'src/dtos/asset-response.dto';
-import { EditAction, EditActionItem } from 'src/dtos/editing.dto';
+import { AssetEditAction, AssetEditActionItem } from 'src/dtos/editing.dto';
 import { AssetFileType, AssetStatus, AssetType, AssetVisibility } from 'src/enum';
 import { StorageAsset } from 'src/types';
 import { authStub } from 'test/fixtures/auth.stub';
@@ -613,8 +613,8 @@ export const assetStub = {
     visibility: AssetVisibility.Hidden,
     width: null,
     height: null,
-    edits: [] as EditActionItem[],
-  } as MapAsset & { faces: AssetFace[]; files: AssetFile[]; exifInfo: Exif; edits: EditActionItem[] }),
+    edits: [] as AssetEditActionItem[],
+  } as MapAsset & { faces: AssetFace[]; files: AssetFile[]; exifInfo: Exif; edits: AssetEditActionItem[] }),
 
   livePhotoStillAsset: Object.freeze({
     id: 'live-photo-still-asset',
@@ -634,8 +634,8 @@ export const assetStub = {
     visibility: AssetVisibility.Timeline,
     width: null,
     height: null,
-    edits: [] as EditActionItem[],
-  } as MapAsset & { faces: AssetFace[]; files: AssetFile[]; edits: EditActionItem[] }),
+    edits: [] as AssetEditActionItem[],
+  } as MapAsset & { faces: AssetFace[]; files: AssetFile[]; edits: AssetEditActionItem[] }),
 
   livePhotoWithOriginalFileName: Object.freeze({
     id: 'live-photo-still-asset',
@@ -657,8 +657,8 @@ export const assetStub = {
     visibility: AssetVisibility.Timeline,
     width: null,
     height: null,
-    edits: [] as EditActionItem[],
-  } as MapAsset & { faces: AssetFace[]; files: AssetFile[]; edits: EditActionItem[] }),
+    edits: [] as AssetEditActionItem[],
+  } as MapAsset & { faces: AssetFace[]; files: AssetFile[]; edits: AssetEditActionItem[] }),
 
   withLocation: Object.freeze({
     id: 'asset-with-favorite-id',
@@ -1034,7 +1034,7 @@ export const assetStub = {
     visibility: AssetVisibility.Timeline,
     edits: [
       {
-        action: EditAction.Crop,
+        action: AssetEditAction.Crop,
         parameters: {
           width: 1512,
           height: 1152,
@@ -1042,7 +1042,7 @@ export const assetStub = {
           y: 1512,
         },
       },
-    ] as EditActionItem[],
+    ] as AssetEditActionItem[],
   }),
   withRevertedEdits: Object.freeze({
     id: 'asset-id',

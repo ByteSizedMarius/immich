@@ -17,7 +17,7 @@ import {
   UpdateAssetDto,
 } from 'src/dtos/asset.dto';
 import { AuthDto } from 'src/dtos/auth.dto';
-import { AssetEditsDto, EditActionListDto } from 'src/dtos/editing.dto';
+import { AssetEditActionListDto, AssetEditsDto } from 'src/dtos/editing.dto';
 import { AssetOcrResponseDto } from 'src/dtos/ocr.dto';
 import { ApiTag, Permission, RouteKey } from 'src/enum';
 import { Auth, Authenticated } from 'src/middleware/auth.guard';
@@ -220,7 +220,7 @@ export class AssetController {
   editAsset(
     @Auth() auth: AuthDto,
     @Param() { id }: UUIDParamDto,
-    @Body() dto: EditActionListDto,
+    @Body() dto: AssetEditActionListDto,
   ): Promise<AssetEditsDto> {
     return this.service.editAsset(auth, id, dto);
   }

@@ -1,4 +1,4 @@
-import { EditAction, EditActionItem, MirrorAxis } from 'src/dtos/editing.dto';
+import { AssetEditAction, AssetEditActionItem, MirrorAxis } from 'src/dtos/editing.dto';
 import { AssetOcrResponseDto } from 'src/dtos/ocr.dto';
 import { transformFaceBoundingBox, transformOcrBoundingBox } from 'src/utils/transform';
 import { describe, expect, it } from 'vitest';
@@ -24,8 +24,8 @@ describe('transformFaceBoundingBox', () => {
 
   describe('with crop edit', () => {
     it('should adjust bounding box for crop offset', () => {
-      const edits: EditActionItem[] = [
-        { action: EditAction.Crop, parameters: { x: 50, y: 50, width: 400, height: 300 } },
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Crop, parameters: { x: 50, y: 50, width: 400, height: 300 } },
       ];
       const result = transformFaceBoundingBox(baseFace, edits, baseDimensions);
 
@@ -38,8 +38,8 @@ describe('transformFaceBoundingBox', () => {
     });
 
     it('should handle face partially outside crop area', () => {
-      const edits: EditActionItem[] = [
-        { action: EditAction.Crop, parameters: { x: 150, y: 150, width: 400, height: 300 } },
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Crop, parameters: { x: 150, y: 150, width: 400, height: 300 } },
       ];
       const result = transformFaceBoundingBox(baseFace, edits, baseDimensions);
 
@@ -52,7 +52,7 @@ describe('transformFaceBoundingBox', () => {
 
   describe('with rotate edit', () => {
     it('should rotate 90 degrees clockwise', () => {
-      const edits: EditActionItem[] = [{ action: EditAction.Rotate, parameters: { angle: 90 } }];
+      const edits: AssetEditActionItem[] = [{ action: AssetEditAction.Rotate, parameters: { angle: 90 } }];
       const result = transformFaceBoundingBox(baseFace, edits, baseDimensions);
 
       expect(result.imageWidth).toBe(800);
@@ -65,7 +65,7 @@ describe('transformFaceBoundingBox', () => {
     });
 
     it('should rotate 180 degrees', () => {
-      const edits: EditActionItem[] = [{ action: EditAction.Rotate, parameters: { angle: 180 } }];
+      const edits: AssetEditActionItem[] = [{ action: AssetEditAction.Rotate, parameters: { angle: 180 } }];
       const result = transformFaceBoundingBox(baseFace, edits, baseDimensions);
 
       expect(result.imageWidth).toBe(1000);
@@ -78,7 +78,7 @@ describe('transformFaceBoundingBox', () => {
     });
 
     it('should rotate 270 degrees', () => {
-      const edits: EditActionItem[] = [{ action: EditAction.Rotate, parameters: { angle: 270 } }];
+      const edits: AssetEditActionItem[] = [{ action: AssetEditAction.Rotate, parameters: { angle: 270 } }];
       const result = transformFaceBoundingBox(baseFace, edits, baseDimensions);
 
       expect(result.imageWidth).toBe(800);
@@ -88,7 +88,9 @@ describe('transformFaceBoundingBox', () => {
 
   describe('with mirror edit', () => {
     it('should mirror horizontally', () => {
-      const edits: EditActionItem[] = [{ action: EditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } }];
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
+      ];
       const result = transformFaceBoundingBox(baseFace, edits, baseDimensions);
 
       expect(result.boundingBoxX1).toBe(800);
@@ -100,7 +102,9 @@ describe('transformFaceBoundingBox', () => {
     });
 
     it('should mirror vertically', () => {
-      const edits: EditActionItem[] = [{ action: EditAction.Mirror, parameters: { axis: MirrorAxis.Vertical } }];
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Vertical } },
+      ];
       const result = transformFaceBoundingBox(baseFace, edits, baseDimensions);
 
       expect(result.boundingBoxX1).toBe(100);
@@ -114,9 +118,9 @@ describe('transformFaceBoundingBox', () => {
 
   describe('with combined edits', () => {
     it('should apply crop then rotate', () => {
-      const edits: EditActionItem[] = [
-        { action: EditAction.Crop, parameters: { x: 50, y: 50, width: 400, height: 300 } },
-        { action: EditAction.Rotate, parameters: { angle: 90 } },
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Crop, parameters: { x: 50, y: 50, width: 400, height: 300 } },
+        { action: AssetEditAction.Rotate, parameters: { angle: 90 } },
       ];
       const result = transformFaceBoundingBox(baseFace, edits, baseDimensions);
 
@@ -125,9 +129,9 @@ describe('transformFaceBoundingBox', () => {
     });
 
     it('should apply crop then mirror', () => {
-      const edits: EditActionItem[] = [
-        { action: EditAction.Crop, parameters: { x: 0, y: 0, width: 500, height: 400 } },
-        { action: EditAction.Mirror, parameters: { axis: MirrorAxis.Vertical } },
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Crop, parameters: { x: 0, y: 0, width: 500, height: 400 } },
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Vertical } },
       ];
       const result = transformFaceBoundingBox(baseFace, edits, baseDimensions);
 
@@ -141,8 +145,8 @@ describe('transformFaceBoundingBox', () => {
   describe('with scaled dimensions', () => {
     it('should scale face to match different image dimensions', () => {
       const scaledDimensions = { width: 500, height: 400 }; // Half the original size
-      const edits: EditActionItem[] = [
-        { action: EditAction.Crop, parameters: { x: 50, y: 50, width: 200, height: 150 } },
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Crop, parameters: { x: 50, y: 50, width: 200, height: 150 } },
       ];
       const result = transformFaceBoundingBox(baseFace, edits, scaledDimensions);
 
@@ -182,8 +186,8 @@ describe('transformOcrBoundingBox', () => {
 
   describe('with crop edit', () => {
     it('should adjust normalized coordinates for crop', () => {
-      const edits: EditActionItem[] = [
-        { action: EditAction.Crop, parameters: { x: 100, y: 80, width: 400, height: 320 } },
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Crop, parameters: { x: 100, y: 80, width: 400, height: 320 } },
       ];
       const result = transformOcrBoundingBox(baseOcr, edits, baseDimensions);
 
@@ -203,7 +207,7 @@ describe('transformOcrBoundingBox', () => {
 
   describe('with rotate edit', () => {
     it('should rotate normalized coordinates 90 degrees and reorder points', () => {
-      const edits: EditActionItem[] = [{ action: EditAction.Rotate, parameters: { angle: 90 } }];
+      const edits: AssetEditActionItem[] = [{ action: AssetEditAction.Rotate, parameters: { angle: 90 } }];
       const result = transformOcrBoundingBox(baseOcr, edits, baseDimensions);
 
       expect(result.id).toBe(baseOcr.id);
@@ -219,7 +223,7 @@ describe('transformOcrBoundingBox', () => {
     });
 
     it('should rotate 180 degrees and reorder points', () => {
-      const edits: EditActionItem[] = [{ action: EditAction.Rotate, parameters: { angle: 180 } }];
+      const edits: AssetEditActionItem[] = [{ action: AssetEditAction.Rotate, parameters: { angle: 180 } }];
       const result = transformOcrBoundingBox(baseOcr, edits, baseDimensions);
 
       expect(result.x1).toBeCloseTo(0.8, 5);
@@ -233,7 +237,7 @@ describe('transformOcrBoundingBox', () => {
     });
 
     it('should rotate 270 degrees and reorder points', () => {
-      const edits: EditActionItem[] = [{ action: EditAction.Rotate, parameters: { angle: 270 } }];
+      const edits: AssetEditActionItem[] = [{ action: AssetEditAction.Rotate, parameters: { angle: 270 } }];
       const result = transformOcrBoundingBox(baseOcr, edits, baseDimensions);
 
       expect(result.id).toBe(baseOcr.id);
@@ -251,7 +255,9 @@ describe('transformOcrBoundingBox', () => {
 
   describe('with mirror edit', () => {
     it('should mirror horizontally', () => {
-      const edits: EditActionItem[] = [{ action: EditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } }];
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
+      ];
       const result = transformOcrBoundingBox(baseOcr, edits, baseDimensions);
 
       expect(result.x1).toBeCloseTo(0.9, 5);
@@ -259,7 +265,9 @@ describe('transformOcrBoundingBox', () => {
     });
 
     it('should mirror vertically', () => {
-      const edits: EditActionItem[] = [{ action: EditAction.Mirror, parameters: { axis: MirrorAxis.Vertical } }];
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Vertical } },
+      ];
       const result = transformOcrBoundingBox(baseOcr, edits, baseDimensions);
 
       expect(result.x1).toBeCloseTo(0.1, 5);
@@ -269,9 +277,9 @@ describe('transformOcrBoundingBox', () => {
 
   describe('with combined edits', () => {
     it('should preserve OCR metadata through transforms', () => {
-      const edits: EditActionItem[] = [
-        { action: EditAction.Crop, parameters: { x: 0, y: 0, width: 500, height: 400 } },
-        { action: EditAction.Rotate, parameters: { angle: 90 } },
+      const edits: AssetEditActionItem[] = [
+        { action: AssetEditAction.Crop, parameters: { x: 0, y: 0, width: 500, height: 400 } },
+        { action: AssetEditAction.Rotate, parameters: { angle: 90 } },
       ];
       const result = transformOcrBoundingBox(baseOcr, edits, baseDimensions);
 

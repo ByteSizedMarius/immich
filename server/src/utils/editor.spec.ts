@@ -1,5 +1,5 @@
 import { AssetFace } from 'src/database';
-import { EditAction } from 'src/dtos/editing.dto';
+import { AssetEditAction } from 'src/dtos/editing.dto';
 import { AssetOcrResponseDto } from 'src/dtos/ocr.dto';
 import { SourceType } from 'src/enum';
 import { boundingBoxOverlap, checkFaceVisibility, checkOcrVisibility } from 'src/utils/editor';
@@ -95,7 +95,7 @@ describe('checkFaceVisibility', () => {
   it('should mark face as visible when fully inside crop area', () => {
     const faces = [createFace({ boundingBoxX1: 100, boundingBoxY1: 100, boundingBoxX2: 200, boundingBoxY2: 200 })];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 0, y: 0, width: 500, height: 500 },
     };
 
@@ -108,7 +108,7 @@ describe('checkFaceVisibility', () => {
   it('should mark face as hidden when fully outside crop area', () => {
     const faces = [createFace({ boundingBoxX1: 600, boundingBoxY1: 600, boundingBoxX2: 700, boundingBoxY2: 700 })];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 0, y: 0, width: 500, height: 500 },
     };
 
@@ -122,7 +122,7 @@ describe('checkFaceVisibility', () => {
     // Face spans 100-200 (100px), crop starts at 150, so 50% overlap
     const faces = [createFace({ boundingBoxX1: 100, boundingBoxY1: 100, boundingBoxX2: 200, boundingBoxY2: 200 })];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 150, y: 100, width: 500, height: 500 },
     };
 
@@ -136,7 +136,7 @@ describe('checkFaceVisibility', () => {
     // Face spans 100-200 (100px), crop starts at 160, so 40% overlap
     const faces = [createFace({ boundingBoxX1: 100, boundingBoxY1: 100, boundingBoxX2: 200, boundingBoxY2: 200 })];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 160, y: 100, width: 500, height: 500 },
     };
 
@@ -166,7 +166,7 @@ describe('checkFaceVisibility', () => {
       }),
     ];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 0, y: 0, width: 500, height: 500 },
     };
 
@@ -193,7 +193,7 @@ describe('checkFaceVisibility', () => {
       }),
     ];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 0, y: 0, width: 200, height: 200 },
     };
 
@@ -243,7 +243,7 @@ describe('checkOcrVisibility', () => {
     // OCR box at normalized coords 0.1-0.2 = 100-200px in 1000x1000 image
     const ocrs = [createOcr()];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 0, y: 0, width: 500, height: 500 },
     };
 
@@ -257,7 +257,7 @@ describe('checkOcrVisibility', () => {
     // OCR box at normalized coords 0.8-0.9 = 800-900px
     const ocrs = [createOcr({ x1: 0.8, y1: 0.8, x2: 0.9, y2: 0.8, x3: 0.9, y3: 0.9, x4: 0.8, y4: 0.9 })];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 0, y: 0, width: 500, height: 500 },
     };
 
@@ -271,7 +271,7 @@ describe('checkOcrVisibility', () => {
     // OCR at 100-200px (0.1-0.2 normalized), crop starts at 150
     const ocrs = [createOcr()];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 150, y: 100, width: 500, height: 500 },
     };
 
@@ -285,7 +285,7 @@ describe('checkOcrVisibility', () => {
     // OCR at 100-200px, crop starts at 160 = 40% overlap
     const ocrs = [createOcr()];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 160, y: 100, width: 500, height: 500 },
     };
 
@@ -301,7 +301,7 @@ describe('checkOcrVisibility', () => {
       createOcr({ id: 'ocr-outside', x1: 0.8, y1: 0.8, x2: 0.9, y2: 0.8, x3: 0.9, y3: 0.9, x4: 0.8, y4: 0.9 }),
     ];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 0, y: 0, width: 500, height: 500 },
     };
 
@@ -329,7 +329,7 @@ describe('checkOcrVisibility', () => {
       }),
     ];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 0, y: 0, width: 500, height: 500 },
     };
 
@@ -344,7 +344,7 @@ describe('checkOcrVisibility', () => {
     // OCR at 0.1-0.2 normalized = 50-100px in 500x500 image
     const ocrs = [createOcr()];
     const crop = {
-      action: EditAction.Crop,
+      action: AssetEditAction.Crop,
       parameters: { x: 0, y: 0, width: 200, height: 200 },
     };
 

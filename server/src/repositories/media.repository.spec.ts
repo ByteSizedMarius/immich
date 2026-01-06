@@ -1,6 +1,6 @@
 import sharp from 'sharp';
 import { AssetFace } from 'src/database';
-import { EditAction, EditActionCrop, MirrorAxis } from 'src/dtos/editing.dto';
+import { AssetEditAction, AssetEditActionCrop, MirrorAxis } from 'src/dtos/editing.dto';
 import { AssetOcrResponseDto } from 'src/dtos/ocr.dto';
 import { SourceType } from 'src/enum';
 import { LoggingRepository } from 'src/repositories/logging.repository';
@@ -81,7 +81,7 @@ describe(MediaRepository.name, () => {
         }).png(),
         [
           {
-            action: EditAction.Crop,
+            action: AssetEditAction.Crop,
             parameters: {
               x: 100,
               y: 200,
@@ -108,7 +108,7 @@ describe(MediaRepository.name, () => {
         }).png(),
         [
           {
-            action: EditAction.Rotate,
+            action: AssetEditAction.Rotate,
             parameters: {
               angle: 90,
             },
@@ -124,7 +124,7 @@ describe(MediaRepository.name, () => {
     it('should apply mirror edit correctly', async () => {
       const resultHorizontal = await sut['applyEdits'](sharp(await buildTestQuadImage()), [
         {
-          action: EditAction.Mirror,
+          action: AssetEditAction.Mirror,
           parameters: {
             axis: MirrorAxis.Horizontal,
           },
@@ -143,7 +143,7 @@ describe(MediaRepository.name, () => {
 
       const resultVertical = await sut['applyEdits'](sharp(await buildTestQuadImage()), [
         {
-          action: EditAction.Mirror,
+          action: AssetEditAction.Mirror,
           parameters: {
             axis: MirrorAxis.Vertical,
           },
@@ -170,8 +170,8 @@ describe(MediaRepository.name, () => {
     it('should apply horizontal mirror then vertical mirror (equivalent to 180° rotation)', async () => {
       const imageBuffer = await buildTestQuadImage();
       const result = await sut['applyEdits'](sharp(imageBuffer), [
-        { action: EditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
-        { action: EditAction.Mirror, parameters: { axis: MirrorAxis.Vertical } },
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Vertical } },
       ]);
 
       const buffer = await result.png().toBuffer();
@@ -188,8 +188,8 @@ describe(MediaRepository.name, () => {
     it('should apply rotate 90° then horizontal mirror', async () => {
       const imageBuffer = await buildTestQuadImage();
       const result = await sut['applyEdits'](sharp(imageBuffer), [
-        { action: EditAction.Rotate, parameters: { angle: 90 } },
-        { action: EditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
+        { action: AssetEditAction.Rotate, parameters: { angle: 90 } },
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
       ]);
 
       const buffer = await result.png().toBuffer();
@@ -206,7 +206,7 @@ describe(MediaRepository.name, () => {
     it('should apply 180° rotation', async () => {
       const imageBuffer = await buildTestQuadImage();
       const result = await sut['applyEdits'](sharp(imageBuffer), [
-        { action: EditAction.Rotate, parameters: { angle: 180 } },
+        { action: AssetEditAction.Rotate, parameters: { angle: 180 } },
       ]);
 
       const buffer = await result.png().toBuffer();
@@ -223,7 +223,7 @@ describe(MediaRepository.name, () => {
     it('should apply 270° rotations', async () => {
       const imageBuffer = await buildTestQuadImage();
       const result = await sut['applyEdits'](sharp(imageBuffer), [
-        { action: EditAction.Rotate, parameters: { angle: 270 } },
+        { action: AssetEditAction.Rotate, parameters: { angle: 270 } },
       ]);
 
       const buffer = await result.png().toBuffer();
@@ -240,8 +240,8 @@ describe(MediaRepository.name, () => {
     it('should apply crop then rotate 90°', async () => {
       const imageBuffer = await buildTestQuadImage();
       const result = await sut['applyEdits'](sharp(imageBuffer), [
-        { action: EditAction.Crop, parameters: { x: 0, y: 0, width: 1000, height: 500 } },
-        { action: EditAction.Rotate, parameters: { angle: 90 } },
+        { action: AssetEditAction.Crop, parameters: { x: 0, y: 0, width: 1000, height: 500 } },
+        { action: AssetEditAction.Rotate, parameters: { angle: 90 } },
       ]);
 
       const buffer = await result.png().toBuffer();
@@ -256,8 +256,8 @@ describe(MediaRepository.name, () => {
     it('should apply rotate 90° then crop', async () => {
       const imageBuffer = await buildTestQuadImage();
       const result = await sut['applyEdits'](sharp(imageBuffer), [
-        { action: EditAction.Crop, parameters: { x: 0, y: 0, width: 500, height: 1000 } },
-        { action: EditAction.Rotate, parameters: { angle: 90 } },
+        { action: AssetEditAction.Crop, parameters: { x: 0, y: 0, width: 500, height: 1000 } },
+        { action: AssetEditAction.Rotate, parameters: { angle: 90 } },
       ]);
 
       const buffer = await result.png().toBuffer();
@@ -272,9 +272,9 @@ describe(MediaRepository.name, () => {
     it('should apply vertical mirror then horizontal mirror then rotate 90°', async () => {
       const imageBuffer = await buildTestQuadImage();
       const result = await sut['applyEdits'](sharp(imageBuffer), [
-        { action: EditAction.Mirror, parameters: { axis: MirrorAxis.Vertical } },
-        { action: EditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
-        { action: EditAction.Rotate, parameters: { angle: 90 } },
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Vertical } },
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
+        { action: AssetEditAction.Rotate, parameters: { angle: 90 } },
       ]);
 
       const buffer = await result.png().toBuffer();
@@ -291,8 +291,8 @@ describe(MediaRepository.name, () => {
     it('should apply crop to single quadrant then mirror', async () => {
       const imageBuffer = await buildTestQuadImage();
       const result = await sut['applyEdits'](sharp(imageBuffer), [
-        { action: EditAction.Crop, parameters: { x: 0, y: 0, width: 500, height: 500 } },
-        { action: EditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
+        { action: AssetEditAction.Crop, parameters: { x: 0, y: 0, width: 500, height: 500 } },
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
       ]);
 
       const buffer = await result.png().toBuffer();
@@ -309,9 +309,9 @@ describe(MediaRepository.name, () => {
     it('should apply all operations: crop, rotate, mirror', async () => {
       const imageBuffer = await buildTestQuadImage();
       const result = await sut['applyEdits'](sharp(imageBuffer), [
-        { action: EditAction.Crop, parameters: { x: 0, y: 0, width: 500, height: 1000 } },
-        { action: EditAction.Rotate, parameters: { angle: 90 } },
-        { action: EditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
+        { action: AssetEditAction.Crop, parameters: { x: 0, y: 0, width: 500, height: 1000 } },
+        { action: AssetEditAction.Rotate, parameters: { angle: 90 } },
+        { action: AssetEditAction.Mirror, parameters: { axis: MirrorAxis.Horizontal } },
       ]);
 
       const buffer = await result.png().toBuffer();
@@ -356,8 +356,8 @@ describe(MediaRepository.name, () => {
 
     describe('with crop edit', () => {
       it('should mark face as visible when fully inside crop area', () => {
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 0, y: 0, width: 500, height: 400 },
         };
         const faces = [baseFace];
@@ -368,8 +368,8 @@ describe(MediaRepository.name, () => {
       });
 
       it('should mark face as visible when more than 50% inside crop area', () => {
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 150, y: 150, width: 500, height: 400 },
         };
         // Face at (100,100)-(200,200), crop starts at (150,150)
@@ -384,8 +384,8 @@ describe(MediaRepository.name, () => {
       });
 
       it('should mark face as hidden when less than 50% inside crop area', () => {
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 250, y: 250, width: 500, height: 400 },
         };
         // Face completely outside crop area
@@ -397,8 +397,8 @@ describe(MediaRepository.name, () => {
       });
 
       it('should mark face as hidden when completely outside crop area', () => {
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 500, y: 500, width: 200, height: 200 },
         };
         const faces = [baseFace];
@@ -409,8 +409,8 @@ describe(MediaRepository.name, () => {
       });
 
       it('should handle multiple faces with mixed visibility', () => {
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 0, y: 0, width: 300, height: 300 },
         };
         const faceInside: AssetFace = {
@@ -449,8 +449,8 @@ describe(MediaRepository.name, () => {
           boundingBoxX2: 100,
           boundingBoxY2: 100,
         };
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 50, y: 0, width: 100, height: 100 },
         };
         const faces = [faceAtEdge];
@@ -465,8 +465,8 @@ describe(MediaRepository.name, () => {
       it('should handle faces when asset dimensions differ from face image dimensions', () => {
         // Face stored at 1000x800 resolution, but displaying at 500x400
         const scaledDimensions = { width: 500, height: 400 };
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 0, y: 0, width: 250, height: 200 },
         };
         // Face at (100,100)-(200,200) on 1000x800
@@ -496,8 +496,8 @@ describe(MediaRepository.name, () => {
       it('should only consider crop for visibility calculation', () => {
         // Even if the image will be rotated/mirrored, visibility is determined
         // solely by whether the face overlaps with the crop area
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 0, y: 0, width: 300, height: 300 },
         };
 
@@ -561,8 +561,8 @@ describe(MediaRepository.name, () => {
 
     describe('with crop edit', () => {
       it('should mark OCR as visible when fully inside crop area', () => {
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 0, y: 0, width: 500, height: 400 },
         };
         // OCR box: (0.1,0.1)-(0.2,0.2) on 1000x800 = (100,80)-(200,160)
@@ -575,8 +575,8 @@ describe(MediaRepository.name, () => {
       });
 
       it('should mark OCR as hidden when completely outside crop area', () => {
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 500, y: 500, width: 200, height: 200 },
         };
         // OCR box: (100,80)-(200,160) - completely outside crop
@@ -588,8 +588,8 @@ describe(MediaRepository.name, () => {
       });
 
       it('should mark OCR as hidden when less than 50% inside crop area', () => {
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 150, y: 120, width: 500, height: 400 },
         };
         // OCR box: (100,80)-(200,160)
@@ -605,8 +605,8 @@ describe(MediaRepository.name, () => {
       });
 
       it('should handle multiple OCR items with mixed visibility', () => {
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 0, y: 0, width: 300, height: 300 },
         };
         const ocrInside: AssetOcrResponseDto = {
@@ -646,8 +646,8 @@ describe(MediaRepository.name, () => {
           x4: 0.1,
           y4: 0.2,
         };
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 0, y: 0, width: 300, height: 300 },
         };
         const ocrs = [rotatedOcr];
@@ -674,8 +674,8 @@ describe(MediaRepository.name, () => {
       it('should only consider crop for visibility calculation', () => {
         // Even if the image will be rotated/mirrored, visibility is determined
         // solely by whether the OCR box overlaps with the crop area
-        const crop: EditActionCrop = {
-          action: EditAction.Crop,
+        const crop: AssetEditActionCrop = {
+          action: AssetEditAction.Crop,
           parameters: { x: 0, y: 0, width: 300, height: 300 },
         };
 

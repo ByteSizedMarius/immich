@@ -367,14 +367,14 @@ class AssetsApi {
   ///
   /// * [String] id (required):
   ///
-  /// * [EditActionListDto] editActionListDto (required):
-  Future<Response> editAssetWithHttpInfo(String id, EditActionListDto editActionListDto,) async {
+  /// * [AssetEditActionListDto] assetEditActionListDto (required):
+  Future<Response> editAssetWithHttpInfo(String id, AssetEditActionListDto assetEditActionListDto,) async {
     // ignore: prefer_const_declarations
     final apiPath = r'/assets/{id}/edits'
       .replaceAll('{id}', id);
 
     // ignore: prefer_final_locals
-    Object? postBody = editActionListDto;
+    Object? postBody = assetEditActionListDto;
 
     final queryParams = <QueryParam>[];
     final headerParams = <String, String>{};
@@ -402,9 +402,9 @@ class AssetsApi {
   ///
   /// * [String] id (required):
   ///
-  /// * [EditActionListDto] editActionListDto (required):
-  Future<AssetEditsDto?> editAsset(String id, EditActionListDto editActionListDto,) async {
-    final response = await editAssetWithHttpInfo(id, editActionListDto,);
+  /// * [AssetEditActionListDto] assetEditActionListDto (required):
+  Future<AssetEditsDto?> editAsset(String id, AssetEditActionListDto assetEditActionListDto,) async {
+    final response = await editAssetWithHttpInfo(id, assetEditActionListDto,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

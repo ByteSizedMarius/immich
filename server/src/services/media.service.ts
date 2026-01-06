@@ -3,7 +3,7 @@ import { FACE_THUMBNAIL_SIZE, JOBS_ASSET_PAGINATION_SIZE } from 'src/constants';
 import { StorageCore, ThumbnailPathEntity } from 'src/cores/storage.core';
 import { Exif } from 'src/database';
 import { OnEvent, OnJob } from 'src/decorators';
-import { CropParameters, EditAction, EditActionItem } from 'src/dtos/editing.dto';
+import { AssetEditAction, AssetEditActionItem, CropParameters } from 'src/dtos/editing.dto';
 import { SystemConfigFFmpegDto } from 'src/dtos/system-config.dto';
 import {
   AssetFileType,
@@ -293,7 +293,7 @@ export class MediaService extends BaseService {
       // check if the edits modify faces or ocr
       const assetFaces = await this.personRepository.getFaces(asset.id, { onlyVisible: false });
       const ocrData = await this.ocrRepository.getByAssetId(asset.id, { isVisible: false });
-      const crop = asset.edits.find((e) => e.action === EditAction.Crop);
+      const crop = asset.edits.find((e) => e.action === AssetEditAction.Crop);
       const originalDimensions = getDimensions(asset.exifInfo!);
 
       const faceStatuses = checkFaceVisibility(assetFaces, originalDimensions, crop);
@@ -336,7 +336,7 @@ export class MediaService extends BaseService {
       originalFileName: string;
       originalPath: string;
       exifInfo: Exif;
-      edits: EditActionItem[];
+      edits: AssetEditActionItem[];
     },
     useEdits: boolean,
   ) {
@@ -480,7 +480,7 @@ export class MediaService extends BaseService {
       size: FACE_THUMBNAIL_SIZE,
       edits: [
         {
-          action: EditAction.Crop,
+          action: AssetEditAction.Crop,
           parameters: this.getCrop(
             { old: { width: oldWidth, height: oldHeight }, new: { width: info.width, height: info.height } },
             { x1, y1, x2, y2 },

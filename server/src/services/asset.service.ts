@@ -18,7 +18,7 @@ import {
   mapStats,
 } from 'src/dtos/asset.dto';
 import { AuthDto } from 'src/dtos/auth.dto';
-import { AssetEditsDto, EditAction, EditActionListDto } from 'src/dtos/editing.dto';
+import { AssetEditAction, AssetEditActionListDto, AssetEditsDto } from 'src/dtos/editing.dto';
 import { AssetOcrResponseDto } from 'src/dtos/ocr.dto';
 import {
   AssetFileType,
@@ -513,7 +513,7 @@ export class AssetService extends BaseService {
     };
   }
 
-  async editAsset(auth: AuthDto, id: string, dto: EditActionListDto): Promise<AssetEditsDto> {
+  async editAsset(auth: AuthDto, id: string, dto: AssetEditActionListDto): Promise<AssetEditsDto> {
     await this.requireAccess({ auth, permission: Permission.AssetEdit, ids: [id] });
 
     const asset = await this.assetRepository.getById(id, { exifInfo: true });
@@ -544,7 +544,7 @@ export class AssetService extends BaseService {
       throw new BadRequestException('Asset dimensions are not available for editing');
     }
 
-    const crop = dto.edits.find((e) => e.action === EditAction.Crop)?.parameters;
+    const crop = dto.edits.find((e) => e.action === AssetEditAction.Crop)?.parameters;
     if (crop) {
       const { x, y, width, height } = crop;
       if (x + width > assetWidth || y + height > assetHeight) {

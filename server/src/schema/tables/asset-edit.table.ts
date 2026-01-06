@@ -1,8 +1,8 @@
-import { EditAction, EditActionParameter } from 'src/dtos/editing.dto';
+import { AssetEditAction, AssetEditActionParameter } from 'src/dtos/editing.dto';
 import { AssetTable } from 'src/schema/tables/asset.table';
 import { Column, ForeignKeyColumn, Generated, PrimaryGeneratedColumn } from 'src/sql-tools';
 
-export class AssetEditTable<T extends EditAction = EditAction> {
+export class AssetEditTable<T extends AssetEditAction = AssetEditAction> {
   @PrimaryGeneratedColumn()
   id!: Generated<string>;
 
@@ -13,5 +13,5 @@ export class AssetEditTable<T extends EditAction = EditAction> {
   action!: T;
 
   @Column({ type: 'jsonb' })
-  parameters!: EditActionParameter[T];
+  parameters!: AssetEditActionParameter[T];
 }

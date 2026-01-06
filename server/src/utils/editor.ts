@@ -1,5 +1,5 @@
 import { AssetFace } from 'src/database';
-import { EditActionCrop } from 'src/dtos/editing.dto';
+import { AssetEditActionCrop } from 'src/dtos/editing.dto';
 import { AssetOcrResponseDto } from 'src/dtos/ocr.dto';
 import { ImageDimensions } from 'src/types';
 
@@ -20,7 +20,7 @@ export function boundingBoxOverlap(
 export function checkFaceVisibility(
   faces: AssetFace[],
   assetDimensions: ImageDimensions,
-  crop?: EditActionCrop,
+  crop?: AssetEditActionCrop,
 ): { visible: AssetFace[]; hidden: AssetFace[] } {
   if (!crop) {
     return {
@@ -61,7 +61,7 @@ export function checkFaceVisibility(
 export function checkOcrVisibility(
   ocrs: AssetOcrResponseDto[],
   assetDimensions: ImageDimensions,
-  crop?: EditActionCrop,
+  crop?: AssetEditActionCrop,
 ): { visible: AssetOcrResponseDto[]; hidden: AssetOcrResponseDto[] } {
   if (!crop) {
     return {

@@ -7,7 +7,7 @@ import { Writable } from 'node:stream';
 import sharp from 'sharp';
 import { ORIENTATION_TO_SHARP_ROTATION } from 'src/constants';
 import { Exif } from 'src/database';
-import { EditActionItem } from 'src/dtos/editing.dto';
+import { AssetEditActionItem } from 'src/dtos/editing.dto';
 import { Colorspace, LogLevel, RawExtractedFormat } from 'src/enum';
 import { LoggingRepository } from 'src/repositories/logging.repository';
 import {
@@ -145,7 +145,7 @@ export class MediaRepository {
     return pipeline.raw().toBuffer({ resolveWithObject: true });
   }
 
-  private async applyEdits(pipeline: sharp.Sharp, edits: EditActionItem[]): Promise<sharp.Sharp> {
+  private async applyEdits(pipeline: sharp.Sharp, edits: AssetEditActionItem[]): Promise<sharp.Sharp> {
     const affineEditOperations = edits.filter((edit) => edit.action !== 'crop');
     const matrix = createAffineMatrix(affineEditOperations);
 

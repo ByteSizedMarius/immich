@@ -3307,7 +3307,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EditActionListDto"
+                "$ref": "#/components/schemas/AssetEditActionListDto"
               }
             }
           },
@@ -15354,6 +15354,89 @@
         ],
         "type": "object"
       },
+      "AssetEditActionCrop": {
+        "properties": {
+          "action": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EditAction"
+              }
+            ]
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/CropParameters"
+          }
+        },
+        "required": [
+          "action",
+          "parameters"
+        ],
+        "type": "object"
+      },
+      "AssetEditActionListDto": {
+        "properties": {
+          "edits": {
+            "description": "list of edits",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/AssetEditActionCrop"
+                },
+                {
+                  "$ref": "#/components/schemas/AssetEditActionRotate"
+                },
+                {
+                  "$ref": "#/components/schemas/AssetEditActionMirror"
+                }
+              ]
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "edits"
+        ],
+        "type": "object"
+      },
+      "AssetEditActionMirror": {
+        "properties": {
+          "action": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EditAction"
+              }
+            ]
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/MirrorParameters"
+          }
+        },
+        "required": [
+          "action",
+          "parameters"
+        ],
+        "type": "object"
+      },
+      "AssetEditActionRotate": {
+        "properties": {
+          "action": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EditAction"
+              }
+            ]
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/RotateParameters"
+          }
+        },
+        "required": [
+          "action",
+          "parameters"
+        ],
+        "type": "object"
+      },
       "AssetEditsDto": {
         "properties": {
           "assetId": {
@@ -15365,13 +15448,13 @@
             "items": {
               "anyOf": [
                 {
-                  "$ref": "#/components/schemas/EditActionCrop"
+                  "$ref": "#/components/schemas/AssetEditActionCrop"
                 },
                 {
-                  "$ref": "#/components/schemas/EditActionRotate"
+                  "$ref": "#/components/schemas/AssetEditActionRotate"
                 },
                 {
-                  "$ref": "#/components/schemas/EditActionMirror"
+                  "$ref": "#/components/schemas/AssetEditActionMirror"
                 }
               ]
             },
@@ -16684,89 +16767,6 @@
           "mirror"
         ],
         "type": "string"
-      },
-      "EditActionCrop": {
-        "properties": {
-          "action": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/EditAction"
-              }
-            ]
-          },
-          "parameters": {
-            "$ref": "#/components/schemas/CropParameters"
-          }
-        },
-        "required": [
-          "action",
-          "parameters"
-        ],
-        "type": "object"
-      },
-      "EditActionListDto": {
-        "properties": {
-          "edits": {
-            "description": "list of edits",
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/EditActionCrop"
-                },
-                {
-                  "$ref": "#/components/schemas/EditActionRotate"
-                },
-                {
-                  "$ref": "#/components/schemas/EditActionMirror"
-                }
-              ]
-            },
-            "minItems": 1,
-            "type": "array"
-          }
-        },
-        "required": [
-          "edits"
-        ],
-        "type": "object"
-      },
-      "EditActionMirror": {
-        "properties": {
-          "action": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/EditAction"
-              }
-            ]
-          },
-          "parameters": {
-            "$ref": "#/components/schemas/MirrorParameters"
-          }
-        },
-        "required": [
-          "action",
-          "parameters"
-        ],
-        "type": "object"
-      },
-      "EditActionRotate": {
-        "properties": {
-          "action": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/EditAction"
-              }
-            ]
-          },
-          "parameters": {
-            "$ref": "#/components/schemas/RotateParameters"
-          }
-        },
-        "required": [
-          "action",
-          "parameters"
-        ],
-        "type": "object"
       },
       "EmailNotificationsResponse": {
         "properties": {

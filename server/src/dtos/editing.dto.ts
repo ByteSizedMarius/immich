@@ -3,7 +3,7 @@ import { ClassConstructor, plainToInstance, Transform, Type } from 'class-transf
 import { ArrayMinSize, IsEnum, IsInt, Min, ValidateNested } from 'class-validator';
 import { IsAxisAlignedRotation, IsUniqueEditActions, ValidateUUID } from 'src/validation';
 
-export enum EditAction {
+export enum AssetEditAction {
   Crop = 'crop',
   Rotate = 'rotate',
   Mirror = 'mirror',
@@ -48,64 +48,65 @@ export class MirrorParameters {
   axis!: MirrorAxis;
 }
 
-class EditActionBase {
-  @IsEnum(EditAction)
-  @ApiProperty({ enum: EditAction, enumName: 'EditAction' })
-  action!: EditAction;
+class AssetEditActionBase {
+  @IsEnum(AssetEditAction)
+  @ApiProperty({ enum: AssetEditAction, enumName: 'EditAction' })
+  action!: AssetEditAction;
 }
 
-export class EditActionCrop extends EditActionBase {
+export class AssetEditActionCrop extends AssetEditActionBase {
   @ValidateNested()
   @Type(() => CropParameters)
   @ApiProperty({ type: CropParameters })
   parameters!: CropParameters;
 }
 
-export class EditActionRotate extends EditActionBase {
+export class AssetEditActionRotate extends AssetEditActionBase {
   @ValidateNested()
   @Type(() => RotateParameters)
   @ApiProperty({ type: RotateParameters })
   parameters!: RotateParameters;
 }
 
-export class EditActionMirror extends EditActionBase {
+export class AssetEditActionMirror extends AssetEditActionBase {
   @ValidateNested()
   @Type(() => MirrorParameters)
   @ApiProperty({ type: MirrorParameters })
   parameters!: MirrorParameters;
 }
 
-export type EditActionItem =
+export type AssetEditActionItem =
   | {
-      action: EditAction.Crop;
+      action: AssetEditAction.Crop;
       parameters: CropParameters;
     }
   | {
-      action: EditAction.Rotate;
+      action: AssetEditAction.Rotate;
       parameters: RotateParameters;
     }
   | {
-      action: EditAction.Mirror;
+      action: AssetEditAction.Mirror;
       parameters: MirrorParameters;
     };
 
-export type EditActionParameter = {
-  [EditAction.Crop]: CropParameters;
-  [EditAction.Rotate]: RotateParameters;
-  [EditAction.Mirror]: MirrorParameters;
+export type AssetEditActionParameter = {
+  [AssetEditAction.Crop]: CropParameters;
+  [AssetEditAction.Rotate]: RotateParameters;
+  [AssetEditAction.Mirror]: MirrorParameters;
 };
 
-type EditActions = EditActionCrop | EditActionRotate | EditActionMirror;
-const actionToClass: Record<EditAction, ClassConstructor<EditActions>> = {
-  [EditAction.Crop]: EditActionCrop,
-  [EditAction.Rotate]: EditActionRotate,
-  [EditAction.Mirror]: EditActionMirror,
+type AssetEditActions = AssetEditActionCrop | AssetEditActionRotate | AssetEditActionMirror;
+const actionToClass: Record<AssetEditAction, ClassConstructor<AssetEditActions>> = {
+  [AssetEditAction.Crop]: AssetEditActionCrop,
+  [AssetEditAction.Rotate]: AssetEditActionRotate,
+  [AssetEditAction.Mirror]: AssetEditActionMirror,
 } as const;
 
-const getActionClass = (item: { action: EditAction }): ClassConstructor<EditActions> => actionToClass[item.action];
+const getActionClass = (item: { action: AssetEditAction }): ClassConstructor<AssetEditActions> =>
+  actionToClass[item.action];
 
-@ApiExtraModels(EditActionRotate, EditActionMirror, EditActionCrop)
-export class EditActionListDto {
+@ApiExtraModels(AssetEditActionRotate, AssetEditActionMirror, AssetEditActionCrop)
+export class AssetEditActionListDto {
   /** list of edits */
   @ArrayMinSize(1)
   @IsUniqueEditActions()
@@ -114,10 +115,10 @@ export class EditActionListDto {
     Array.isArray(edits) ? edits.map((item) => plainToInstance(getActionClass(item), item)) : edits,
   )
   @ApiProperty({ anyOf: Object.values(actionToClass).map((target) => ({ $ref: getSchemaPath(target) })) })
-  edits!: EditActionItem[];
+  edits!: AssetEditActionItem[];
 }
 
-export class AssetEditsDto extends EditActionListDto {
+export class AssetEditsDto extends AssetEditActionListDto {
   @ValidateUUID()
   @ApiProperty()
   assetId!: string;
