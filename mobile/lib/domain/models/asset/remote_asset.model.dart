@@ -10,7 +10,7 @@ class RemoteAsset extends BaseAsset {
   final AssetVisibility visibility;
   final String ownerId;
   final String? stackId;
-  final bool isTrashed;
+  final DateTime? deletedAt;
 
   const RemoteAsset({
     required this.id,
@@ -29,7 +29,7 @@ class RemoteAsset extends BaseAsset {
     this.visibility = AssetVisibility.timeline,
     super.livePhotoVideoId,
     this.stackId,
-    this.isTrashed = false,
+    this.deletedAt,
   }) : localAssetId = localId;
 
   @override
@@ -78,7 +78,7 @@ class RemoteAsset extends BaseAsset {
         thumbHash == other.thumbHash &&
         visibility == other.visibility &&
         stackId == other.stackId &&
-        isTrashed == other.isTrashed;
+        deletedAt == other.deletedAt;
   }
 
   @override
@@ -90,7 +90,7 @@ class RemoteAsset extends BaseAsset {
       thumbHash.hashCode ^
       visibility.hashCode ^
       stackId.hashCode ^
-      isTrashed.hashCode;
+      deletedAt.hashCode;
 
   RemoteAsset copyWith({
     String? id,
@@ -109,7 +109,7 @@ class RemoteAsset extends BaseAsset {
     AssetVisibility? visibility,
     String? livePhotoVideoId,
     String? stackId,
-    bool? isTrashed,
+    DateTime? deletedAt,
   }) {
     return RemoteAsset(
       id: id ?? this.id,
@@ -128,7 +128,7 @@ class RemoteAsset extends BaseAsset {
       visibility: visibility ?? this.visibility,
       livePhotoVideoId: livePhotoVideoId ?? this.livePhotoVideoId,
       stackId: stackId ?? this.stackId,
-      isTrashed: isTrashed ?? this.isTrashed,
+      deletedAt: deletedAt ?? this.deletedAt,
     );
   }
 }
