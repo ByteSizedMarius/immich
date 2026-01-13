@@ -1852,10 +1852,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/BulkIdResponseDto"
-                  },
-                  "type": "array"
+                  "$ref": "#/components/schemas/AlbumAddAssetsResponseDto"
                 }
               }
             },
@@ -14989,6 +14986,24 @@
         },
         "required": [
           "isOnboarded"
+        ],
+        "type": "object"
+      },
+      "AlbumAddAssetsResponseDto": {
+        "properties": {
+          "album": {
+            "$ref": "#/components/schemas/AlbumResponseDto"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/BulkIdResponseDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "album",
+          "results"
         ],
         "type": "object"
       },

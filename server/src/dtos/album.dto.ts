@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 import { ArrayNotEmpty, IsArray, IsString, ValidateNested } from 'class-validator';
 import _ from 'lodash';
 import { AlbumUser, AuthSharedLink, User } from 'src/database';
-import { BulkIdErrorReason } from 'src/dtos/asset-ids.response.dto';
+import { BulkIdErrorReason, BulkIdResponseDto } from 'src/dtos/asset-ids.response.dto';
 import { AssetResponseDto, MapAsset, mapAsset } from 'src/dtos/asset-response.dto';
 import { AuthDto } from 'src/dtos/auth.dto';
 import { UserResponseDto, mapUser } from 'src/dtos/user.dto';
@@ -162,6 +162,14 @@ export class AlbumResponseDto {
   @Type(() => ContributorCountResponseDto)
   @ApiProperty({ type: [ContributorCountResponseDto], required: false })
   contributorCounts?: ContributorCountResponseDto[];
+}
+
+export class AlbumAddAssetsResponseDto {
+  @ApiProperty()
+  album!: AlbumResponseDto;
+
+  @ApiProperty({ type: [BulkIdResponseDto] })
+  results!: BulkIdResponseDto[];
 }
 
 export type MapAlbumDto = {

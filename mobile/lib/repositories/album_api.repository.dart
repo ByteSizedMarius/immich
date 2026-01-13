@@ -94,7 +94,7 @@ class AlbumApiRepository extends ApiRepository {
     final List<String> added = [];
     final List<String> duplicates = [];
 
-    for (final result in response) {
+    for (final result in response.results) {
       if (result.success) {
         added.add(result.id);
       } else if (result.error == BulkIdResponseDtoErrorEnum.duplicate) {

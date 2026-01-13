@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import {
   AddUsersDto,
+  AlbumAddAssetsResponseDto,
   AlbumInfoDto,
   AlbumResponseDto,
   AlbumsAddAssetsDto,
@@ -163,8 +164,8 @@ export class AlbumService extends BaseService {
     await this.albumRepository.delete(id);
   }
 
-  async addAssets(auth: AuthDto, id: string, dto: BulkIdsDto): Promise<BulkIdResponseDto[]> {
-    const album = await this.findOrFail(id, { withAssets: false });
+  async addAssets(auth: AuthDto, id: string, dto: BulkIdsDto): Promise<AlbumAddAssetsResponseDto> {
+    let album = await this.findOrFail(id, { withAssets: false });
     await this.requireAccess({ auth, permission: Permission.AlbumAssetCreate, ids: [id] });
 
     const results = await addAssets(
@@ -188,9 +189,11 @@ export class AlbumService extends BaseService {
       for (const recipientId of allUsersExceptUs) {
         await this.eventRepository.emit('AlbumUpdate', { id, recipientId });
       }
+
+      album = await this.findOrFail(id, { withAssets: false });
     }
 
-    return results;
+    return { album: mapAlbumWithoutAssets(album), results };
   }
 
   async addAssetsToAlbums(auth: AuthDto, dto: AlbumsAddAssetsDto): Promise<AlbumsAddAssetsResponseDto> {

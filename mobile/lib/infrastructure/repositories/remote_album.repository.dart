@@ -238,7 +238,7 @@ class DriftRemoteAlbumRepository extends DriftDatabaseRepository {
     return query.map((row) => row.readTable(_db.remoteAssetEntity).toDto()).get();
   }
 
-  Future<int> addAssets(String albumId, List<String> assetIds) async {
+  Future<int> addAssets(String albumId, List<String> assetIds, {required DateTime updatedAt}) async {
     final albumAssets = assetIds.map(
       (assetId) => RemoteAlbumAssetEntityCompanion(albumId: Value(albumId), assetId: Value(assetId)),
     );
@@ -246,6 +246,9 @@ class DriftRemoteAlbumRepository extends DriftDatabaseRepository {
     await _db.batch((batch) {
       batch.insertAll(_db.remoteAlbumAssetEntity, albumAssets);
     });
+
+    await (_db.remoteAlbumEntity.update()..where((t) => t.id.equals(albumId)))
+        .write(RemoteAlbumEntityCompanion(updatedAt: Value(updatedAt)));
 
     return assetIds.length;
   }

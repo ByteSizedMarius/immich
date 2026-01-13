@@ -130,11 +130,9 @@ class RemoteAlbumService {
   }
 
   Future<int> addAssets({required String albumId, required List<String> assetIds}) async {
-    final album = await _albumApiRepository.addAssets(albumId, assetIds);
-
-    await _repository.addAssets(albumId, album.added);
-
-    return album.added.length;
+    final result = await _albumApiRepository.addAssets(albumId, assetIds);
+    await _repository.addAssets(albumId, result.added, updatedAt: result.album.updatedAt);
+    return result.added.length;
   }
 
   Future<void> deleteAlbum(String albumId) async {

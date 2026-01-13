@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Endpoint, HistoryBuilder } from 'src/decorators';
 import {
   AddUsersDto,
+  AlbumAddAssetsResponseDto,
   AlbumInfoDto,
   AlbumResponseDto,
   AlbumsAddAssetsDto,
@@ -113,7 +114,7 @@ export class AlbumController {
     @Auth() auth: AuthDto,
     @Param() { id }: UUIDParamDto,
     @Body() dto: BulkIdsDto,
-  ): Promise<BulkIdResponseDto[]> {
+  ): Promise<AlbumAddAssetsResponseDto> {
     return this.service.addAssets(auth, id, dto);
   }
 

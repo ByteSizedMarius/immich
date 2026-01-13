@@ -35,10 +35,10 @@ class DriftAlbumApiRepository extends ApiRepository {
     return (removed: removed, failed: failed);
   }
 
-  Future<({List<String> added, List<String> failed})> addAssets(String albumId, Iterable<String> assetIds) async {
+  Future<({RemoteAlbum album, List<String> added, List<String> failed})> addAssets(String albumId, Iterable<String> assetIds) async {
     final response = await checkNull(_api.addAssetsToAlbum(albumId, BulkIdsDto(ids: assetIds.toList())));
     final List<String> added = [], failed = [];
-    for (final dto in response) {
+    for (final dto in response.results) {
       if (dto.success) {
         added.add(dto.id);
       } else {
@@ -46,7 +46,7 @@ class DriftAlbumApiRepository extends ApiRepository {
       }
     }
 
-    return (added: added, failed: failed);
+    return (album: response.album.toRemoteAlbum(), added: added, failed: failed);
   }
 
   Future<RemoteAlbum> updateAlbum(

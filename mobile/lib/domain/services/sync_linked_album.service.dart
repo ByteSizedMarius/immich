@@ -45,8 +45,8 @@ class SyncLinkedAlbumService {
         final assetIds = await _remoteAlbumRepository.getLinkedAssetIds(userId, localAlbum.id, linkedRemoteAlbumId);
         _log.fine("Syncing ${assetIds.length} assets to remote album: ${remoteAlbum.name}");
         if (assetIds.isNotEmpty) {
-          final album = await _albumApiRepository.addAssets(remoteAlbum.id, assetIds);
-          await _remoteAlbumRepository.addAssets(remoteAlbum.id, album.added);
+          final result = await _albumApiRepository.addAssets(remoteAlbum.id, assetIds);
+          await _remoteAlbumRepository.addAssets(remoteAlbum.id, result.added, updatedAt: result.album.updatedAt);
         }
       }),
     );
